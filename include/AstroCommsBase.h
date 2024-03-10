@@ -29,6 +29,11 @@ class AstroCommsBase
         void toggleHeartBeat();
         void checkSerialLEDs();
         void checkSerialLED(const uint8_t pin, unsigned long & ulMillis);
+
+        void writeDome(uint8_t* data,   size_t data_len);
+        void writeBody(uint8_t* data,   size_t data_len);
+        void writeFlthy(uint8_t* data,  size_t data_len);
+        void writeXBee(uint8_t* data,   size_t data_len);
 };
 
 #endif

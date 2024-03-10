@@ -20,6 +20,8 @@ bool AstroCommsBase::init()
     pinMode(P_LED_XBEE_TX, OUTPUT);
     pinMode(P_LED_XBEE_RX, OUTPUT);
 
+    pinMode(P_JUMPER_MONITOR, INPUT_PULLUP);
+
     digitalWrite(P_LED_STATUS, LOW);
     digitalWrite(P_LED_FLTHY_TX, LOW);
     digitalWrite(P_LED_DOME_TX, LOW);
@@ -70,7 +72,8 @@ bool AstroCommsBase::init()
 
 void AstroCommsBase::loop()
 {
-    char SerialBuffer[256];
+    uint8_t SerialBuffer[SERIAL_BUFFER_LEN];
+    size_t DataLen = 0;
 
     // Heartbeat
     if ((millis() - HeartBeatMillis) > HEARTBEAT_MILLIS)
@@ -83,24 +86,46 @@ void AstroCommsBase::loop()
 
     if (SerialDome.available())
     {
-        SerialDome.readBytes(SerialBuffer, SerialDome.available());
-        digitalWrite(P_LED_DOME_RX, HIGH);
+        DataLen =  SerialDome.available();
+        SerialDome.readBytes(SerialBuffer, DataLen);
+        if (digitalRead(P_JUMPER_MONITOR) != LOW)
+            digitalWrite(P_LED_DOME_RX, HIGH);
         LED_DOME_RX_Millis = millis();
-        Serial.print("D");
+
+        writeDome(SerialBuffer, DataLen);
+        writeFlthy(SerialBuffer, DataLen);
     }
     if (SerialBody.available())
     {
-        SerialBody.readBytes(SerialBuffer, SerialBody.available());
-        digitalWrite(P_LED_BODY_RX, HIGH);
+        DataLen =  SerialBody.available();
+        SerialBody.readBytes(SerialBuffer, DataLen);
+        if (digitalRead(P_JUMPER_MONITOR) != LOW)
+            digitalWrite(P_LED_BODY_RX, HIGH);
         LED_BODY_RX_Millis = millis();
-        Serial.print("B");
+
+        writeBody(SerialBuffer, DataLen);
+        writeFlthy(SerialBuffer, DataLen);
     }
     if (SerialXBee.available())
     {
-        SerialXBee.readBytes(SerialBuffer, SerialXBee.available());
-        digitalWrite(P_LED_XBEE_RX, HIGH);
+        DataLen = SerialXBee.available();
+        SerialXBee.readBytes(SerialBuffer, DataLen);
+        if (digitalRead(P_JUMPER_MONITOR) != LOW)
+            digitalWrite(P_LED_XBEE_RX, HIGH);
         LED_XBEE_RX_Millis = millis();
-        Serial.print("X");
+
+        writeDome(SerialBuffer, DataLen);
+        writeFlthy(SerialBuffer, DataLen);
+    }
+
+    // Debug
+    if (Serial.available())
+    {
+        DataLen = Serial.available();
+        Serial.readBytes(SerialBuffer, DataLen);
+
+        writeDome(SerialBuffer, DataLen);
+        writeFlthy(SerialBuffer, DataLen);
     }
 }
 
@@ -111,7 +136,8 @@ void AstroCommsBase::toggleHeartBeat()
     else
       HeartBeatStatus = LOW;
 
-    digitalWrite(P_LED_STATUS, HeartBeatStatus);
+    if (digitalRead(P_JUMPER_MONITOR) != LOW)
+        digitalWrite(P_LED_STATUS, HeartBeatStatus);
 }
 
 void AstroCommsBase::checkSerialLEDs()
@@ -135,6 +161,50 @@ void AstroCommsBase::checkSerialLED(const uint8_t pin, unsigned long & ulMillis)
             ulMillis = 0;
         }        
     }
+}
+
+void AstroCommsBase::writeDome(uint8_t* data, size_t data_len)
+{
+    SerialDome.write(data, data_len);
+    if (digitalRead(P_JUMPER_MONITOR) != LOW)
+    {
+        digitalWrite(P_LED_DOME_TX, HIGH);
+        LED_DOME_TX_Millis = millis();
+    }
+    SerialDome.flush();
+}
+
+void AstroCommsBase::writeBody(uint8_t* data, size_t data_len)
+{
+    SerialBody.write(data, data_len);
+    if (digitalRead(P_JUMPER_MONITOR) != LOW)
+    {
+        digitalWrite(P_LED_BODY_TX, HIGH);
+        LED_BODY_TX_Millis = millis();
+    }
+    SerialBody.flush();
+}
+
+void AstroCommsBase::writeFlthy(uint8_t* data, size_t data_len)
+{
+    SerialFlthy.write(data, data_len);
+    if (digitalRead(P_JUMPER_MONITOR) != LOW)
+    {
+        digitalWrite(P_LED_FLTHY_TX, HIGH);
+        LED_FLTHY_TX_Millis = millis();
+    }
+    SerialFlthy.flush();        
+}
+
+void AstroCommsBase::writeXBee(uint8_t* data, size_t data_len)
+{
+    SerialXBee.write(data, data_len);
+    if (digitalRead(P_JUMPER_MONITOR) != LOW)
+    {
+        digitalWrite(P_LED_XBEE_TX, HIGH);
+        LED_XBEE_TX_Millis = millis();
+    }
+    SerialXBee.flush();        
 }
 
 
