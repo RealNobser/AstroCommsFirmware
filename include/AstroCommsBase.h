@@ -3,6 +3,8 @@
 
 #include<Arduino.h>
 
+#include"config.h"
+
 class AstroCommsBase
 {
     public:
@@ -26,14 +28,37 @@ class AstroCommsBase
         unsigned long LED_XBEE_RX_Millis    = 0;
 
     protected:
+        char SerialDomeBuffer[SERIAL_BUFFER_LEN];
+        char SerialBodyBuffer[SERIAL_BUFFER_LEN];
+        char SerialXBeeBuffer[SERIAL_BUFFER_LEN];
+        char SerialDebugBuffer[SERIAL_BUFFER_LEN];
+
+        unsigned int DomeBufferIndex = 0;
+        unsigned int BodyBufferIndex = 0;
+        unsigned int XBeeBufferIndex = 0;
+        unsigned int DebugBufferIndex = 0;
+ 
+    protected:
         void toggleHeartBeat();
         void checkSerialLEDs();
         void checkSerialLED(const uint8_t pin, unsigned long & ulMillis);
 
-        void writeDome(uint8_t* data,   size_t data_len);
-        void writeBody(uint8_t* data,   size_t data_len);
-        void writeFlthy(uint8_t* data,  size_t data_len);
-        void writeXBee(uint8_t* data,   size_t data_len);
+        void dispatchDomeCommand(const char* command);
+        void dispatchBodyCommand(const char* command);
+        void dispatchXBeeCommand(const char* command);
+        void dispatchDebugCommand(const char* command);
+
+        void writeDome(const uint8_t* data, const size_t data_len);
+        void writeDome(const char* data);
+
+        void writeBody(const uint8_t* data, const size_t data_len);
+        void writeBody(const char* data);
+
+        void writeFlthy(const uint8_t* data, const size_t data_len);
+        void writeFlthy(const char* data);
+
+        void writeXBee(const uint8_t* data, const size_t data_len);
+        void writeXBee(const char* data);
 };
 
 #endif
