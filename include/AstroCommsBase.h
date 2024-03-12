@@ -1,14 +1,16 @@
 #ifndef __ASTROCOMMS_H__
 #define __ASTROCOMMS_H__
 
-#include<Arduino.h>
+#include <Arduino.h>
 
-#include"config.h"
+#include "config.h"
+#include "AstroCommsStorage.h"
 
 class AstroCommsBase
 {
     public:
         AstroCommsBase();
+
         bool init();
         void loop();
 
@@ -38,11 +40,17 @@ class AstroCommsBase
         unsigned int XBeeBufferIndex = 0;
         unsigned int DebugBufferIndex = 0;
  
+        AstroCommsStorage Storage;
+
+
     protected:
+        virtual void checkEEPROM(const bool factoryReset = false);
+
         void toggleHeartBeat();
         void checkSerialLEDs();
         void checkSerialLED(const uint8_t pin, unsigned long & ulMillis);
 
+        void(* resetFunc) (void) = 0;
 
 /*
  * Dispatch Methods:

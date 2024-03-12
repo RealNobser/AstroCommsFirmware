@@ -25,6 +25,8 @@
 #define HEARTBEAT_MILLIS    1000
 #define SERIAL_BLINK_MILLIS 10
 
+#define MAX_FLTHY_CMD_SIZE  6
+
 // Generic GPIOs
 #define P_LED_STATUS    7
 #define P_LED_FLTHY_TX  2
