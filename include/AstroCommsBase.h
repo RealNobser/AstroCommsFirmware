@@ -43,6 +43,22 @@ class AstroCommsBase
         void checkSerialLEDs();
         void checkSerialLED(const uint8_t pin, unsigned long & ulMillis);
 
+
+/*
+ * Dispatch Methods:
+ *
+ * Dome RX  Dome TX
+ * Body RX  Body TX
+ * XBee RX  Dome TX
+ * Debug RX Dome TX
+ * 
+ * Prefix   Route
+ * ;        replace ; by : and send to body
+ * #        sent to Flthy (must be replaced, collision with MarcDuino configuration commands!)
+ * :SExx    sent to target, add Flthy command regarding command map (triggers Flthy on body sequences, too!)
+ * 
+*/
+
         void dispatchDomeCommand(const char* command);
         void dispatchBodyCommand(const char* command);
         void dispatchXBeeCommand(const char* command);
