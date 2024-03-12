@@ -14,7 +14,7 @@
 #define HW_VERSION      "1.6.0"
 #define CONFIG_VERSION  10
 
-#define SERIAL_BAUD         115200
+#define SERIAL_BAUD         9600
 #define SERIAL_FLTHY_BAUD   9600
 #define SERIAL_DOME_BAUD    9600
 #define SERIAL_BODY_BAUD    9600
@@ -26,6 +26,7 @@
 #define SERIAL_BLINK_MILLIS 10
 
 #define MAX_FLTHY_CMD_SIZE  6
+#define MAX_SEQUENCE_NR     99
 
 // Generic GPIOs
 #define P_LED_STATUS    7
@@ -50,8 +51,8 @@
 #define P_FLTHY_TX      14  // Serial 3
 #define P_DOME_TX       18  // Serial 1
 #define P_DOME_RX       19  // Serial 1
-#define P_BODY_TX       11
-#define P_BODY_RX       10
+#define P_BODY_TX       11  // Soft Serial
+#define P_BODY_RX       10  // Soft Serial
 #define P_XBEE_TX       17  // Serial 2
 #define P_XBEE_RX       16  // Serial 2
 

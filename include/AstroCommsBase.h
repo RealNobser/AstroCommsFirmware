@@ -20,6 +20,9 @@ class AstroCommsBase
         unsigned long HeartBeatMillis       = 0;
         byte HeartBeatStatus = LOW;
 
+        unsigned long FlthyMillis           = 0;
+        unsigned long FlthyDuration         = 0;
+
         unsigned long LED_STATUS_Millis     = 0;
         unsigned long LED_FLTHY_TX_Millis   = 0;
         unsigned long LED_DOME_TX_Millis    = 0;
@@ -42,7 +45,6 @@ class AstroCommsBase
  
         AstroCommsStorage Storage;
 
-
     protected:
         virtual void checkEEPROM(const bool factoryReset = false);
 
@@ -50,27 +52,20 @@ class AstroCommsBase
         void checkSerialLEDs();
         void checkSerialLED(const uint8_t pin, unsigned long & ulMillis);
 
-        void(* resetFunc) (void) = 0;
+        void clearFlthy();
 
-/*
- * Dispatch Methods:
- *
- * Dome RX  Dome TX
- * Body RX  Body TX
- * XBee RX  Dome TX
- * Debug RX Dome TX
- * 
- * Prefix   Route
- * ;        replace ; by : and send to body
- * #        sent to Flthy (must be replaced, collision with MarcDuino configuration commands!)
- * :SExx    sent to target, add Flthy command regarding command map (triggers Flthy on body sequences, too!)
- * 
-*/
+        void(* resetFunc) (void) = 0;
 
         void dispatchDomeCommand(const char* command);
         void dispatchBodyCommand(const char* command);
         void dispatchXBeeCommand(const char* command);
         void dispatchDebugCommand(const char* command);
+
+        void processDebugCommand(const char* command);
+        void processFlthySequence(const char* command);
+
+        void printFlthyCmd(const uint8_t index);
+        void printUsage();
 
         void writeDome(const uint8_t* data, const size_t data_len);
         void writeDome(const char* data);

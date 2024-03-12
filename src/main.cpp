@@ -53,6 +53,8 @@ void setup() {
   Serial.println();
   Serial.write(product);
 
+  Serial.println("Enter /help for usage.");
+
   AstroComms->init();  
 }
 
