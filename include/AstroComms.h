@@ -6,10 +6,10 @@
 #include "config.h"
 #include "AstroCommsStorage.h"
 
-class AstroCommsBase
+class AstroComms
 {
     public:
-        AstroCommsBase();
+        AstroComms();
 
         bool init();
         void loop();

@@ -1,10 +1,10 @@
 #include <Arduino.h>
-#include <AstroCommsBase.h>
+#include <AstroComms.h>
 #include <SoftwareSerial.h>
 
 #include <config.h>
 
-AstroCommsBase* AstroComms = nullptr;
+AstroComms* AstroComms_Module = nullptr;
 SoftwareSerial SerialBody(P_BODY_RX, P_BODY_TX);
 
 void setup() {
@@ -43,22 +43,22 @@ void setup() {
   SerialBody.println("Body");
   #endif
 
-  AstroComms = new AstroCommsBase();
+  AstroComms_Module = new AstroComms();
 
-  if (AstroComms == nullptr)
+  if (AstroComms_Module == nullptr)
     return;
 
   char product[256];
-  sprintf(product, "%s\r\nVersion %s\r\n\r\n", AstroComms->getProductName(), VERSION);
+  sprintf(product, "%s\r\nVersion %s\r\n\r\n", AstroComms_Module->getProductName(), VERSION);
   Serial.println();
   Serial.write(product);
 
   Serial.println("Enter /help for usage.");
 
-  AstroComms->init();  
+  AstroComms_Module->init();  
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
-  AstroComms->loop();
+  AstroComms_Module->loop();
 }

@@ -1,10 +1,10 @@
-#include <AstroCommsBase.h>
+#include <AstroComms.h>
 #include <SoftwareSerial.h>
 #include <config.h>
 
 extern SoftwareSerial SerialBody;
 
-AstroCommsBase::AstroCommsBase()
+AstroComms::AstroComms()
 {
     HeartBeatMillis     = millis();
 
@@ -14,7 +14,7 @@ AstroCommsBase::AstroCommsBase()
     memset(SerialDebugBuffer, 0x00, SERIAL_BUFFER_LEN);
 }
 
-bool AstroCommsBase::init()
+bool AstroComms::init()
 {
     pinMode(P_LED_STATUS, OUTPUT);
     pinMode(P_LED_FLTHY_TX, OUTPUT);
@@ -77,7 +77,7 @@ bool AstroCommsBase::init()
     return false;
 }
 
-void AstroCommsBase::loop()
+void AstroComms::loop()
 {
     // Heartbeat
     if ((millis() - HeartBeatMillis) > HEARTBEAT_MILLIS)
@@ -174,7 +174,7 @@ void AstroCommsBase::loop()
     }
 }
 
-void AstroCommsBase::checkEEPROM(const bool factoryReset /*= false*/)
+void AstroComms::checkEEPROM(const bool factoryReset /*= false*/)
 {
     byte ConfigVersion = Storage.getConfigVersion();
     if ((ConfigVersion != CONFIG_VERSION) || (factoryReset == true))
@@ -223,7 +223,7 @@ void AstroCommsBase::checkEEPROM(const bool factoryReset /*= false*/)
     }
 }
 
-void AstroCommsBase::toggleHeartBeat()
+void AstroComms::toggleHeartBeat()
 {
     if (HeartBeatStatus == LOW)
       HeartBeatStatus = HIGH;
@@ -234,7 +234,7 @@ void AstroCommsBase::toggleHeartBeat()
         digitalWrite(P_LED_STATUS, HeartBeatStatus);
 }
 
-void AstroCommsBase::checkSerialLEDs()
+void AstroComms::checkSerialLEDs()
 {
     checkSerialLED(P_LED_FLTHY_TX,  LED_FLTHY_TX_Millis);
     checkSerialLED(P_LED_DOME_TX,   LED_DOME_TX_Millis);
@@ -245,7 +245,7 @@ void AstroCommsBase::checkSerialLEDs()
     checkSerialLED(P_LED_XBEE_RX,   LED_XBEE_RX_Millis);    
 }
 
-void AstroCommsBase::checkSerialLED(const uint8_t pin, unsigned long & ulMillis)
+void AstroComms::checkSerialLED(const uint8_t pin, unsigned long & ulMillis)
 {
     if (ulMillis > 0)
     {
@@ -257,7 +257,7 @@ void AstroCommsBase::checkSerialLED(const uint8_t pin, unsigned long & ulMillis)
     }
 }
 
-void AstroCommsBase::clearFlthy()
+void AstroComms::clearFlthy()
 {
     #ifdef DEBUG_MSG
     Serial.println("Setting Flthys to default state");
@@ -270,7 +270,7 @@ void AstroCommsBase::clearFlthy()
     #endif
 }
 
-void AstroCommsBase::dispatchDomeCommand(const char* command)
+void AstroComms::dispatchDomeCommand(const char* command)
 {
     char data[SERIAL_BUFFER_LEN];
     char flthy[MAX_FLTHY_CMD_SIZE+1];
@@ -306,7 +306,7 @@ void AstroCommsBase::dispatchDomeCommand(const char* command)
     #endif
 }
 
-void AstroCommsBase::dispatchBodyCommand(const char* command)
+void AstroComms::dispatchBodyCommand(const char* command)
 {
     char data[SERIAL_BUFFER_LEN];
     char flthy[MAX_FLTHY_CMD_SIZE+1];
@@ -342,7 +342,7 @@ void AstroCommsBase::dispatchBodyCommand(const char* command)
     #endif
 }
 
-void AstroCommsBase::dispatchXBeeCommand(const char* command)
+void AstroComms::dispatchXBeeCommand(const char* command)
 {
     char data[SERIAL_BUFFER_LEN];
     char flthy[MAX_FLTHY_CMD_SIZE+1];
@@ -378,7 +378,7 @@ void AstroCommsBase::dispatchXBeeCommand(const char* command)
     #endif
 }
 
-void AstroCommsBase::dispatchDebugCommand(const char* command)
+void AstroComms::dispatchDebugCommand(const char* command)
 {
     char data[SERIAL_BUFFER_LEN];
     char flthy[MAX_FLTHY_CMD_SIZE+1];
@@ -417,7 +417,7 @@ void AstroCommsBase::dispatchDebugCommand(const char* command)
     #endif
 }
 
-void AstroCommsBase::processFlthySequence(const char* command)
+void AstroComms::processFlthySequence(const char* command)
 {
     if (strlen(command) == 5)
     {
@@ -442,7 +442,7 @@ void AstroCommsBase::processFlthySequence(const char* command)
 
 }
 
-void AstroCommsBase::printUsage()
+void AstroComms::printUsage()
 {
     Serial.println("\
         /read all   - reads all commands data\r\n\
@@ -453,25 +453,7 @@ void AstroCommsBase::printUsage()
     ");
 }
 
-/*
-
-/help - usage
-
-(unsupported) /commands - display the full list of commands for Marcduino, Holo Projectors servos and leds, Teeces and sounds
-
-/read all - reads all commands data
-
-/read xx - reads command data to send to Flthys for a given index from 00 to 22. Example: /read 01
-
-/write xx command milliseconds - writes command data to Flthys for a given index from 00 to 22. Example: /write 01 #A0971 10000
-
-/free xx - frees command data
-
-/reset - reset command table to factory
-
-*/
-
-void AstroCommsBase::processDebugCommand(const char* command)
+void AstroComms::processDebugCommand(const char* command)
 {
     char tokens[SERIAL_BUFFER_LEN];
     char* token = NULL;
@@ -550,7 +532,7 @@ void AstroCommsBase::processDebugCommand(const char* command)
     }
 }
 
-void AstroCommsBase::printFlthyCmd(const uint8_t index)
+void AstroComms::printFlthyCmd(const uint8_t index)
 {
     char message[SERIAL_BUFFER_LEN];
     char flthy_cmd[MAX_FLTHY_CMD_SIZE+1];
@@ -573,7 +555,7 @@ void AstroCommsBase::printFlthyCmd(const uint8_t index)
     Serial.println(message);
 }
 
-void AstroCommsBase::writeDome(const uint8_t* data, const size_t data_len)
+void AstroComms::writeDome(const uint8_t* data, const size_t data_len)
 {
     SerialDome.write(data, data_len);
     if (digitalRead(P_JUMPER_MONITOR) != LOW)
@@ -584,7 +566,7 @@ void AstroCommsBase::writeDome(const uint8_t* data, const size_t data_len)
     SerialDome.flush();
 }
 
-void AstroCommsBase::writeDome(const char* data)
+void AstroComms::writeDome(const char* data)
 {
     #ifdef DEBUG_MSG
     Serial.print("Sent to Dome:  ");
@@ -600,7 +582,7 @@ void AstroCommsBase::writeDome(const char* data)
     SerialDome.flush();
 }
 
-void AstroCommsBase::writeBody(const uint8_t* data, const size_t data_len)
+void AstroComms::writeBody(const uint8_t* data, const size_t data_len)
 {
     SerialBody.write(data, data_len);
     if (digitalRead(P_JUMPER_MONITOR) != LOW)
@@ -611,7 +593,7 @@ void AstroCommsBase::writeBody(const uint8_t* data, const size_t data_len)
     SerialBody.flush();
 }
 
-void AstroCommsBase::writeBody(const char* data)
+void AstroComms::writeBody(const char* data)
 {
     #ifdef DEBUG_MSG
     Serial.print("Sent to Body:  ");
@@ -627,7 +609,7 @@ void AstroCommsBase::writeBody(const char* data)
     SerialBody.flush();
 }
 
-void AstroCommsBase::writeFlthy(const uint8_t* data, const size_t data_len)
+void AstroComms::writeFlthy(const uint8_t* data, const size_t data_len)
 {
     SerialFlthy.write(data, data_len);
     if (digitalRead(P_JUMPER_MONITOR) != LOW)
@@ -638,7 +620,7 @@ void AstroCommsBase::writeFlthy(const uint8_t* data, const size_t data_len)
     SerialFlthy.flush();        
 }
 
-void AstroCommsBase::writeFlthy(const char* data)
+void AstroComms::writeFlthy(const char* data)
 {
     #ifdef DEBUG_MSG
     Serial.print("Sent to Flthy: ");
@@ -654,7 +636,7 @@ void AstroCommsBase::writeFlthy(const char* data)
     SerialFlthy.flush();        
 }
 
-void AstroCommsBase::writeXBee(const uint8_t* data, const size_t data_len)
+void AstroComms::writeXBee(const uint8_t* data, const size_t data_len)
 {
     SerialXBee.write(data, data_len);
     if (digitalRead(P_JUMPER_MONITOR) != LOW)
@@ -665,7 +647,7 @@ void AstroCommsBase::writeXBee(const uint8_t* data, const size_t data_len)
     SerialXBee.flush();        
 }
 
-void AstroCommsBase::writeXBee(const char* data)
+void AstroComms::writeXBee(const char* data)
 {
     #ifdef DEBUG_MSG
     Serial.print("Sent to XBee:  ");
