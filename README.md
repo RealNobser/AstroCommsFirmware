@@ -8,8 +8,8 @@
 
 ### Default Command Mapping
 
-| Seq # | Flthy-Cmd | Time to Reset (ms) :|
-| --- | --- | --- |
+| Seq # | Flthy-Cmd | Time to Reset (ms) |
+| --- | --- | ---:|
 | 00 | A0971 | 0 |
 | 01 | A00359 | 4000 |
 | 02 | A0059 | 4000 |
