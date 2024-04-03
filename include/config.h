@@ -2,7 +2,7 @@
 #define __CONFIG_H__
 
 
-#define DEBUG_MSG                    // Additional Log Messages to Serial
+// #define DEBUG_MSG                    // Additional Log Messages to Serial
 
 // DO NOT EDIT BELOW THIS LINE UNLESS YOU REALLY KNOW WHAT YOU ARE DOING
 // ------------------------------------------------
