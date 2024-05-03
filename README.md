@@ -34,3 +34,7 @@
 | 55 | A00387 | 15500 |
 | 56 | A00387 | 10000 |
 | 57 | A00387 | 40000 |
+
+### Hint
+
+To control the BODY panels via app or controlers, the ";" character is used as command prefix! (so use ;OP01 instead of :OP01)
