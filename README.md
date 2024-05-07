@@ -38,4 +38,5 @@
 ### Hints
 
 To control BODY panels via serial, app or controllers, the ";" character is used as command prefix! (so use ;OP01 instead of :OP01)
+
 To configure BODY panels via serial, app or controllers, the "_" character is used as command prefix! (so use _MD02 instead of #MD02)
