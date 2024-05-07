@@ -10,7 +10,7 @@
 //
 // Module Specific stuff
 //
-#define VERSION         "1.1.0"
+#define VERSION         "1.1.1"
 #define HW_VERSION      "1.6.0"
 #define CONFIG_VERSION  10
 

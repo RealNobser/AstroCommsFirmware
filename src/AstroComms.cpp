@@ -394,8 +394,12 @@ void AstroComms::dispatchDebugCommand(const char* command)
 
     switch (data[0])
     {
-        case ';':   // Body prefix
+        case ';':   // Body command prefix
             data[0] = ':';
+            writeBody(data);
+        break;
+        case '_':   // Body config prefix
+            data[0] = '#';
             writeBody(data);
         break;
         case '+':   // Flthy prefix
