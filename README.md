@@ -35,6 +35,7 @@
 | 56 | A00387 | 10000 |
 | 57 | A00387 | 40000 |
 
-### Hint
+### Hints
 
-To control the BODY panels via app or controlers, the ";" character is used as command prefix! (so use ;OP01 instead of :OP01)
+To control BODY panels via serial, app or controllers, the ";" character is used as command prefix! (so use ;OP01 instead of :OP01)
+To configure BODY panels via serial, app or controllers, the "_" character is used as command prefix! (so use _MD02 instead of #MD02)
