@@ -412,6 +412,10 @@ void AstroComms::dispatchDebugCommand(const char* command)
         case '/':
             processDebugCommand(command);
         break;
+        case '*':// Holo Prefix
+            writeDome(data);
+            writeFlthy(data);
+        break;
         default:
             writeDome(data);
             break;
